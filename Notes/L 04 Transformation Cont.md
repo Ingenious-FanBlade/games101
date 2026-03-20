@@ -50,6 +50,8 @@ $$
 
 ## View / Camera Transformation 模型视图变换
 
+将相机和模型一起移动，相机移动到世界坐标的原点
+
 - 相机需要的要素：
   > 1. Position $\vec{e}$
   > 2. Look-at/gaze direction $\hat{g}$
@@ -89,6 +91,9 @@ $$M_{ortho}=\begin{bmatrix}
 \end{bmatrix}$$
 
 ### Perspective Projection 透视投影
+
+将模型从空间坐标映射到摄像机近平面的坐标
+
 - 先将远平面挤压为近平面，再进行正交投影
 > 1. 规定挤压后的远平面z方向不变
 > 2. 规定近平面挤压后不变
