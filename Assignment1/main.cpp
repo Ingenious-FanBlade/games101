@@ -52,7 +52,7 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
 
     eye_fov=eye_fov*MY_PI/180.0f;
     Eigen::Matrix4f orthoM = Eigen::Matrix4f::Identity();
-    float x = zNear*(tanf(eye_fov/2));
+    float x = -zNear*(tanf(eye_fov/2));
     float y = x/aspect_ratio;
     float z = zNear-zFar;
     orthoM<<1/x,0,0,0,
