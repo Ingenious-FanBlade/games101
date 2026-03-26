@@ -18,3 +18,7 @@ triangle processing：确定三角形
 rasterization：逐像素化=>光栅化
 fragment processing：着色=>z buffer深度缓存，shading，phong shading 
 framebuffer operations获得输出图像
+纹理映射 texture mapping： 
+3d模型表面展开
+纹理坐标系u-v[0,1]x[0,1]
+tilable 
