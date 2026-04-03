@@ -260,8 +260,10 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
     auto v = t.toVector4();
 
     // bounding box
-    float x_min, x_max = v.begin()->x();
-    float y_min, y_max = v.begin()->y();
+    float x_min = v.begin()->x();
+    float x_max = v.begin()->x();
+    float y_min = v.begin()->y();
+    float y_max = v.begin()->y();
 
     for (auto iter = v.begin(); iter != v.end(); ++iter)
     {
@@ -299,17 +301,16 @@ void rst::rasterizer::rasterize_triangle(const Triangle &t, const std::array<Eig
                 zp *= Z;
 
                 // color
-                auto interpolated_color = alpha * t.color[0] / v[0].w() + beta * t.color[1] / v[1].w() + gamma * t.color[2] / v[2].w();
-                interpolated_color *= Z;
+                auto interpolated_color = interpolate(alpha,beta,gamma,Eigen::Vector3f(t.color[0]/v[0].w()),Eigen::Vector3f(t.color[1]/v[1].w()),Eigen::Vector3f(t.color[2]/v[2].w()),1/Z);
 
                 // normal
-                auto interpolated_normal = alpha * t.normal[0] / v[0].w() + beta * t.normal[1] / v[1].w() + gamma * t.normal[2] / v[2].w();
+                auto interpolated_normal = interpolate(alpha,beta,gamma,Eigen::Vector3f(t.normal[0]/v[0].w()),Eigen::Vector3f(t.normal[1]/v[1].w()),Eigen::Vector3f(t.normal[2]/v[2].w()),1/Z);
 
-                // texcoord
-                auto interpolated_texcoords = interpolate(alpha,beta,gamma,t.tex_coords[0],t.tex_coords[1],t.tex_coords[2],Z);
+                // texcoords
+                auto interpolated_texcoords = interpolate(alpha,beta,gamma,Eigen::Vector2f(t.tex_coords[0]/v[0].w()),Eigen::Vector2f(t.tex_coords[1]/v[1].w()),Eigen::Vector2f(t.tex_coords[2]/v[2].w()),1/Z);
 
                 // shading coords
-                auto interpolated_shadingcoords = interpolate(alpha,beta,gamma,view_pos[0],view_pos[1],view_pos[2],Z);
+                auto interpolated_shadingcoords = interpolate(alpha,beta,gamma,Eigen::Vector3f(view_pos[0]/v[0].w()),Eigen::Vector3f(view_pos[1]/v[1].w()),Eigen::Vector3f(view_pos[2]/v[2].w()),1/Z);
 
                 fragment_shader_payload payload(interpolated_color, interpolated_normal.normalized(), interpolated_texcoords, texture ? &*texture : nullptr);
                 payload.view_pos = interpolated_shadingcoords;
