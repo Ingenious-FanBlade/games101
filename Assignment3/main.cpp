@@ -168,7 +168,18 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload& payload)
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
+        // ambient
+        result_color+=(ka.cwiseProduct(amb_light_intensity));
+
+        Eigen::Vector3f light_vec=(light.position-point);
+        Eigen::Vector3f vision_vec=(eye_pos-point);
+        Eigen::Vector3f half_vec=(light_vec+vision_vec).normalized();
+
+        // diffuse
+        result_color+=(kd.cwiseProduct(light.intensity)/light_vec.squaredNorm()*std::max(0.f,normal.dot(light_vec.normalized())));
         
+        // specular
+        result_color+=(ks.cwiseProduct(light.intensity)/light_vec.squaredNorm()*std::pow(std::max(0.f,normal.dot(half_vec)),p));
     }
 
     return result_color * 255.f;
@@ -276,7 +287,7 @@ int main(int argc, const char** argv)
     std::string obj_path = "models/spot/";
 
     // Load .obj File
-    bool loadout = Loader.LoadFile("../models/spot/spot_triangulated_good.obj");
+    bool loadout = Loader.LoadFile(obj_path+"spot_triangulated_good.obj");
     for(auto mesh:Loader.LoadedMeshes)
     {
         for(int i=0;i<mesh.Vertices.size();i+=3)
