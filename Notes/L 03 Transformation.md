@@ -29,14 +29,18 @@
   $$
 
 # Linear Transforms
+
 $$x'=ax+by\\y'=cx+dy$$
-$$\begin{bmatrix}
+
+$$
+\begin{bmatrix}
     x'\\y'
 \end{bmatrix}=\begin{bmatrix}
     a&c\\b&d
 \end{bmatrix}\begin{bmatrix}
     x\\y
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 # 齐次坐标下的变换
 
@@ -55,27 +59,35 @@ $$\begin{bmatrix}
 
 ## Scale
 
-$$S(s_x,s_y)=\begin{bmatrix}
+$$
+S(s_x,s_y)=\begin{bmatrix}
     s_x&0&0\\0&s_y&0\\0&0&1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 ## Rotation
 
-$$R(\alpha)=\begin{bmatrix}
+$$
+R(\alpha)=\begin{bmatrix}
     cos\theta&-sin\theta&0\\sin\theta&cos\theta&0\\0&0&1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 ## Translation
-$$T(t_x,t_y)=\begin{bmatrix}
+
+$$
+T(t_x,t_y)=\begin{bmatrix}
     1&0&t_x\\0&1&t_y\\0&0&1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 ## Composite Transform
+
 - $R\cdot T\neq T\cdot R$
 - 对于变换：$A_n(...A_2(A_1(x))) = A_n...A_2\cdot A_1\begin{bmatrix}
     x\\y\\1
 \end{bmatrix}$，从右往左依次应用于向量
 
 ### 复杂变换的分解：以绕某点c为例
-变换矩阵$M=T(-c)R(\alpha)T(c)$（先平移回原点，旋转，然后再平移回c点）
 
+变换矩阵$M=T(-c)R(\alpha)T(c)$（先平移回原点，旋转，然后再平移回c点）

@@ -7,6 +7,7 @@
 #include "global.hpp"
 #include <eigen3/Eigen/Eigen>
 #include <opencv2/opencv.hpp>
+#include <algorithm>
 class Texture{
 private:
     cv::Mat image_data;
@@ -24,11 +25,15 @@ public:
 
     Eigen::Vector3f getColor(float u, float v)
     {
-        auto u_img = u * width;
-        auto v_img = (1 - v) * height;
+        u = std::clamp(u, 0.0f, 1.0f);
+        v = std::clamp(v, 0.0f, 1.0f);
+        int u_img = std::min(static_cast<int>(u * width), width - 1);
+        int v_img = std::min(static_cast<int>((1 - v) * height), height - 1);
         auto color = image_data.at<cv::Vec3b>(v_img, u_img);
         return Eigen::Vector3f(color[0], color[1], color[2]);
     }
+
+    Eigen::Vector3f getColorBilinear(float u,float v);
 
 };
 #endif //RASTERIZER_TEXTURE_H

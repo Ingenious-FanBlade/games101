@@ -1,24 +1,33 @@
-高光：
-观察方向和反射方向接近
-半程向量h和n接近=>镜面反射法线是角平分线=>$\mathbf{h}=\frac{\mathbf{v}+\mathbf{l}}{\|\mathbf{v}+\mathbf{l}\|}$
-镜面反射：$L_s=k_s(I/r^2)max(0,\mathbf{n}\cdot\mathbf{h})^p$，镜面反射，p指数用于控制高光在夹角稍大时能量迅速衰减（p>=100）
-环境光照：$L_a=k_aI_a$，I_a为环境光强度
-总光能量：环境光+漫反射+高光反射
-着色频率
-gouraud shading：顶点法线，顶点做一次着色，然后顶点内的三角形做一次插值算出来着色
-phong shading：逐像素着色
-顶点法线：相邻面法线向量根据面积求加权平均
+# Shading 2
 
-重心坐标
+## Bling-Phong 反射模型
 
-实时渲染管线：
-输入：点
-vertex processing：点投影到屏幕上=>顶点mvp变换，shading
-triangle processing：确定三角形
-rasterization：逐像素化=>光栅化
-fragment processing：着色=>z buffer深度缓存，shading，phong shading 
-framebuffer operations获得输出图像
-纹理映射 texture mapping： 
-3d模型表面展开
-纹理坐标系u-v[0,1]x[0,1]
-tilable 
+### 高光
+- 观察方向和反射方向接近 => 半程向量h和n接近 => 镜面反射法线是角平分线 => $\mathbf{h}=\frac{\mathbf{v}+\mathbf{l}}{\|\mathbf{v}+\mathbf{l}\|}$
+- 镜面反射：$L_s=k_s(I/r^2)max(0,\mathbf{n}\cdot\mathbf{h})^p$
+  > p指数用于控制高光在夹角稍大时能量迅速衰减，收束高光的范围
+
+### 环境光照
+- 环境光照：$L_a = k_aI_a$，$I_a$是环境光
+
+### 总光能量
+- 总能量（对应颜色）：环境光+漫反射+高光反射
+
+## 着色频率
+- Face面着色：对每个面着色，每个面的颜色相同
+- Vertex顶点着色：对每个顶点着色，顶点内的三角形通过一次插值算出来着色
+  >通过计算包含该顶点的所有三角形的法向量的加权平均：
+  >$N_v=\frac{\sum_iN_i}{\|\sum_iN_i\|}$
+- Pixel像素着色：逐像素着色
+  >通过重心坐标插值计算每个像素对应的法线
+
+## Graphics Pipeline 实时渲染管线
+```mermaid
+flowchart TD
+    X[顶点] --> A[Vertex Processing 顶点处理] -- 顶点流 -->B[Triangle Processing 三角形处理] -- 三角形流 -->C[Rasterization 光栅化] -- 片元流 --> D[Fragment Processing 片元处理] -- 已着色的片元 --> E[帧缓冲区操作] --> F[显示]
+```
+
+## Texture Mapping 纹理映射
+- 每一个三角形顶点对应一个纹理点 $(u,v)$
+- 纹理坐标系$u-v: [0,1]\times[0,1]$
+
